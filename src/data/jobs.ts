@@ -11,6 +11,8 @@ export type Job = {
   summary: string;
   description: string;
   requirements: string[];
+  isDemo?: boolean;
+  applicationUrl?: string;
 };
 
 // Conteúdo fictício para prototipação. Não representa vagas abertas reais.
@@ -28,6 +30,7 @@ export const jobs: Job[] = [
     summary: "Exemplo de oportunidade para estudantes que querem aprender construindo interfaces e produtos digitais.",
     description: "Este anúncio fictício ilustra como uma oportunidade poderá ser apresentada no ConectaRR. A empresa, a vaga e as condições não são reais. O objetivo do protótipo é validar se as informações essenciais estão claras para quem procura estágio.",
     requirements: ["Estar cursando graduação ou curso técnico relacionado", "Noções de HTML, CSS e JavaScript", "Vontade de aprender e colaborar"],
+    isDemo: true,
   },
   {
     slug: "assistente-administrativo",
@@ -41,6 +44,7 @@ export const jobs: Job[] = [
     summary: "Exemplo de anúncio com responsabilidades, local de trabalho e requisitos em linguagem direta.",
     description: "Conteúdo demonstrativo criado para revisar a hierarquia da página de detalhes. Não existe processo seletivo associado a esta página.",
     requirements: ["Organização e atenção a detalhes", "Conhecimento básico de planilhas", "Boa comunicação escrita"],
+    isDemo: true,
   },
   {
     slug: "tecnico-de-suporte",
@@ -54,6 +58,7 @@ export const jobs: Job[] = [
     summary: "Exemplo de vaga local para avaliar como município e modalidade aparecem nos resultados.",
     description: "Este conteúdo é fictício e serve apenas para testar a navegação e a busca do protótipo do ConectaRR.",
     requirements: ["Conhecimentos básicos de Windows e redes", "Facilidade para explicar soluções", "Disponibilidade para trabalho presencial"],
+    isDemo: true,
   },
   {
     slug: "analista-de-atendimento",
@@ -67,6 +72,7 @@ export const jobs: Job[] = [
     summary: "Exemplo remoto para testar a distinção entre vagas locais e oportunidades disponíveis em outras regiões.",
     description: "Anúncio fictício. Em uma versão real, a empresa precisará informar com clareza onde pode contratar e quais horários são esperados.",
     requirements: ["Comunicação clara", "Conforto com ferramentas digitais", "Acesso à internet estável"],
+    isDemo: true,
   },
 ];
 
