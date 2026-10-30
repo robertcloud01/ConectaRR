@@ -5,109 +5,77 @@ import Link from "next/link";
 import type { Job } from "@/data/jobs";
 
 function SearchIcon() {
-  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-5"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" strokeWidth="1.8" /><path d="m16 16 4.2 4.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>;
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-5"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" strokeWidth="1.6"/><path d="m16 16 4.2 4.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg>;
 }
 
 function PinIcon() {
-  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-4"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" stroke="currentColor" strokeWidth="1.6" /><circle cx="12" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.6" /></svg>;
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-4"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" stroke="currentColor" strokeWidth="1.5"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.5"/></svg>;
 }
 
 function ArrowIcon() {
-  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-4"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  return <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="size-4"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>;
 }
 
-export function VacancyExplorer({ jobs, cities, isDemo }: { jobs: Job[]; cities: string[]; isDemo: boolean }) {
+type VacancyExplorerProps = { jobs: Job[]; cities: string[]; isDemo: boolean };
+
+export function VacancyExplorer({ jobs, cities, isDemo }: VacancyExplorerProps) {
+  const cityOptions = cities.length ? cities : ["Todas as cidades"];
   const [query, setQuery] = useState("");
-  const [city, setCity] = useState(cities[0]);
+  const [city, setCity] = useState(cityOptions[0]);
   const [modality, setModality] = useState("Todas");
 
+  const areas = [...new Set(jobs.map((job) => job.area))];
   const filteredJobs = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase("pt-BR");
     return jobs.filter((job) => {
-      const matchesQuery = !normalizedQuery || `${job.title} ${job.company} ${job.area} ${job.city}`.toLocaleLowerCase("pt-BR").includes(normalizedQuery);
-      const matchesCity = city === cities[0] || job.city === city;
+      const searchable = `${job.title} ${job.company} ${job.area} ${job.city}`.toLocaleLowerCase("pt-BR");
+      const matchesQuery = !normalizedQuery || searchable.includes(normalizedQuery);
+      const matchesCity = city === cityOptions[0] || job.city === city;
       const matchesModality = modality === "Todas" || job.modality === modality;
       return matchesQuery && matchesCity && matchesModality;
     });
-  }, [city, modality, query]);
+  }, [city, cityOptions, jobs, modality, query]);
+
+  function clearFilters() {
+    setQuery("");
+    setCity(cityOptions[0]);
+    setModality("Todas");
+  }
 
   return (
-    <section id="vagas" className="scroll-mt-24 bg-[#f6f8f5] px-5 py-20 sm:px-8 lg:px-12 lg:py-24">
-      <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="eyebrow">Explore oportunidades</p>
-            <h2 className="section-title mt-3">Seu próximo passo<br className="hidden sm:block" /> pode começar aqui.</h2>
-            <p className="mt-4 max-w-xl text-base leading-7 text-[#56675e]">Encontre oportunidades por área, cidade e modalidade. As candidaturas são feitas diretamente no canal informado pela organização.</p>
-          </div>
-          <span className="demo-pill self-start md:self-auto">{isDemo ? "Exemplos fictícios" : "Vagas publicadas"}</span>
+    <section id="vagas" className="opportunities-section">
+      <div className="opportunities-inner">
+        <div className="opportunities-heading">
+          <div><p className="eyebrow">01 / ENCONTRE SEU CAMINHO</p><h2>Oportunidades<br /><em>em movimento.</em></h2></div>
+          <div className="opportunities-aside"><p>Explore vagas por área, cidade e modalidade. Escolha com calma o próximo passo da sua jornada.</p><span className={isDemo ? "status-pill status-pill-demo" : "status-pill status-pill-live"}><i />{isDemo ? "Exemplos para demonstração" : "Oportunidades publicadas"}</span></div>
         </div>
 
-        <div className="mt-9 grid gap-3 rounded-3xl border border-[#dce5dc] bg-white p-3 shadow-[0_14px_45px_-32px_rgba(18,54,38,.35)] md:grid-cols-[1fr_220px_170px_auto] md:items-center md:p-3">
-          <label className="flex min-h-12 items-center gap-3 rounded-2xl px-3 text-[#718078] focus-within:ring-2 focus-within:ring-[#2d8a63]">
-            <SearchIcon />
-            <span className="sr-only">Cargo, empresa ou área</span>
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Cargo, empresa ou área" className="w-full bg-transparent text-sm text-[#19392c] outline-none placeholder:text-[#87958d]" />
-          </label>
-          <label className="flex min-h-12 items-center gap-3 rounded-2xl border border-[#e6ece6] px-3 text-[#718078] focus-within:ring-2 focus-within:ring-[#2d8a63]">
-            <PinIcon />
-            <span className="sr-only">Município</span>
-            <select value={city} onChange={(event) => setCity(event.target.value)} className="w-full appearance-none bg-transparent text-sm text-[#19392c] outline-none">
-              {cities.map((option) => <option key={option}>{option}</option>)}
-            </select>
-          </label>
-          <label className="flex min-h-12 items-center rounded-2xl border border-[#e6ece6] px-3 focus-within:ring-2 focus-within:ring-[#2d8a63]">
-            <span className="sr-only">Modalidade</span>
-            <select value={modality} onChange={(event) => setModality(event.target.value)} className="w-full appearance-none bg-transparent text-sm text-[#19392c] outline-none">
-              {["Todas", "Presencial", "Híbrido", "Remoto"].map((option) => <option key={option}>{option}</option>)}
-            </select>
-          </label>
-          <a href="#resultados" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[#176344] px-5 text-sm font-semibold text-white transition hover:bg-[#104d33] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#176344]">Buscar <ArrowIcon /></a>
+        <div className="search-panel">
+          <label className="search-field"><SearchIcon /><span className="sr-only">Buscar cargo, empresa ou área</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Qual caminho você procura?" /></label>
+          <label className="filter-field"><PinIcon /><span className="sr-only">Filtrar por município</span><select value={city} onChange={(event) => setCity(event.target.value)}>{cityOptions.map((option) => <option key={option}>{option}</option>)}</select><span aria-hidden="true" className="select-caret">⌄</span></label>
+          <label className="filter-field filter-field-mode"><span className="sr-only">Filtrar por modalidade</span><select value={modality} onChange={(event) => setModality(event.target.value)}>{["Todas", "Presencial", "Híbrido", "Remoto"].map((option) => <option key={option}>{option === "Todas" ? "Qualquer modalidade" : option}</option>)}</select><span aria-hidden="true" className="select-caret">⌄</span></label>
+          <a href="#oportunidades-lista" className="search-submit">Buscar <ArrowIcon /></a>
         </div>
 
-        <div id="resultados" className="mt-10 flex flex-wrap items-center justify-between gap-3">
-          <p aria-live="polite" className="text-sm font-medium text-[#58685f]">{filteredJobs.length} {isDemo ? "exemplos de oportunidade" : "oportunidades"}</p>
-          <div className="flex flex-wrap gap-2">
-            {["Todas", "Presencial", "Híbrido", "Remoto"].map((item) => (
-              <button key={item} type="button" onClick={() => setModality(item)} aria-pressed={modality === item} className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${modality === item ? "border-[#176344] bg-[#176344] text-white" : "border-[#d7e0d7] bg-white text-[#526258] hover:border-[#93ad9b]"}`}>
-                {item === "Todas" ? "Todas" : item}
-              </button>
-            ))}
-          </div>
-        </div>
+        {areas.length > 0 && <div className="area-shortcuts"><span>ATALHOS</span>{areas.map((area) => <button type="button" key={area} onClick={() => setQuery((current) => current === area ? "" : area)} aria-pressed={query === area}>{area}<span aria-hidden="true">↗</span></button>)}</div>}
+
+        <div id="oportunidades-lista" className="vacancy-results-head"><p><strong>{String(filteredJobs.length).padStart(2, "0")}</strong> {isDemo ? "oportunidades de exemplo" : "oportunidades encontradas"}</p><span>{isDemo ? "CONTEÚDO FICTÍCIO · SEM PROCESSO SELETIVO REAL" : "LISTAGEM ATUALIZADA A PARTIR DO CONECTARR"}</span></div>
 
         {filteredJobs.length ? (
-          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="vacancy-grid">
             {filteredJobs.map((job, index) => (
-              <article key={job.slug} className="group flex min-h-[285px] flex-col rounded-3xl border border-[#e1e8e0] bg-white p-6 transition duration-200 hover:-translate-y-1 hover:border-[#b6cdb9] hover:shadow-[0_20px_45px_-35px_rgba(18,54,38,.5)]">
-                <div className="flex items-start justify-between gap-3">
-                  <span className="flex size-11 items-center justify-center rounded-2xl bg-[#edf5ee] text-sm font-bold text-[#176344]">{job.company.slice(0, 1)}</span>
-                  <span className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wide ${job.isDemo ? "bg-[#fbf4e4] text-[#85642b]" : "bg-[#eaf4ed] text-[#286145]"}`}>{job.isDemo ? "Exemplo" : "Publicada"}</span>
-                </div>
-                <p className="mt-5 text-xs font-medium text-[#668075]">{job.area} <span className="mx-1.5 text-[#b7c4ba]">·</span> {job.contract}</p>
-                <h3 className="mt-2 text-lg font-bold leading-6 tracking-[-.02em] text-[#19392c]">{job.title}</h3>
-                <p className="mt-1 text-sm text-[#68776e]">{job.company}</p>
-                <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs text-[#738078]">
-                  <span>{job.city}</span><span>{job.modality}</span>
-                </div>
-                <div className="mt-auto flex items-center justify-between border-t border-[#edf0ec] pt-4">
-                  <span className="text-xs text-[#87928b]">{job.published}</span>
-                  {job.applicationUrl ? (
-                    <a href={job.applicationUrl} target="_blank" rel="noreferrer" aria-label={`Acessar candidatura: ${job.title}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#176344] transition group-hover:gap-2.5">Candidatar-se <ArrowIcon /></a>
-                  ) : (
-                    <Link href={`/vagas/${job.slug}`} aria-label={`Ver detalhes: ${job.title}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#176344] transition group-hover:gap-2.5">Detalhes <ArrowIcon /></Link>
-                  )}
-                </div>
-                {index === 0 && <span className="sr-only">Primeiro exemplo de vaga</span>}
+              <article key={job.slug} className="vacancy-card">
+                <div className="vacancy-card-top"><span className="vacancy-index">{String(index + 1).padStart(2, "0")} / {job.area.toUpperCase()}</span><span className={job.isDemo ? "vacancy-type vacancy-type-demo" : "vacancy-type"}>{job.isDemo ? "DEMONSTRAÇÃO" : "PUBLICADA"}</span></div>
+                <div className="vacancy-company-row"><span className="company-monogram">{job.company.slice(0, 1)}</span><span>{job.company}</span></div>
+                <h3>{job.title}</h3>
+                <p className="vacancy-summary">{job.summary}</p>
+                <div className="vacancy-meta"><span>{job.city}</span><i /><span>{job.modality}</span><i /><span>{job.contract}</span></div>
+                <div className="vacancy-card-bottom">{job.salary ? <span className="vacancy-salary">{job.salary}</span> : <span className="vacancy-published">{job.published}</span>}{job.applicationUrl ? <a href={job.applicationUrl} target="_blank" rel="noreferrer" aria-label={`Acessar a candidatura de ${job.title}`}>Candidatar-se <ArrowIcon /></a> : <Link href={`/vagas/${job.slug}`} aria-label={`Ver detalhes de ${job.title}`}>Ver oportunidade <ArrowIcon /></Link>}</div>
               </article>
             ))}
           </div>
         ) : (
-          <div className="mt-5 rounded-3xl border border-dashed border-[#cbd8cc] bg-white px-6 py-14 text-center">
-            <p className="text-base font-semibold text-[#19392c]">Nenhuma oportunidade encontrada</p>
-            <p className="mt-2 text-sm text-[#68776e]">Tente outra palavra ou remova um dos filtros.</p>
-            <button type="button" onClick={() => { setQuery(""); setCity(cities[0]); setModality("Todas"); }} className="mt-5 text-sm font-semibold text-[#176344] underline underline-offset-4">Limpar filtros</button>
-          </div>
+          <div className="empty-results"><span aria-hidden="true">✳</span><h3>Nenhum caminho com esses filtros.</h3><p>Experimente outra palavra ou volte a ver todas as oportunidades.</p><button type="button" onClick={clearFilters}>Limpar filtros <ArrowIcon /></button></div>
         )}
       </div>
     </section>

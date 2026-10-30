@@ -3,130 +3,163 @@ import { VacancyExplorer } from "@/components/vacancy-explorer";
 import { getPublicJobs } from "@/lib/public-jobs";
 
 function BrandMark() {
-  return <span className="flex size-10 items-center justify-center rounded-[14px] bg-[#176344] text-lg font-black tracking-[-.08em] text-white shadow-[0_5px_14px_-7px_rgba(23,99,68,.7)]">C<span className="text-[#f0c46e]">+</span></span>;
+  return (
+    <span aria-hidden="true" className="brand-mark">
+      <svg viewBox="0 0 32 32" fill="none"><path d="M24.5 8.2A12 12 0 1 0 26 19" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"/><path d="M19 8h6v6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/><circle cx="16" cy="16" r="2" fill="currentColor"/></svg>
+    </span>
+  );
 }
 
-function LocationIcon() {
-  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-4"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" stroke="currentColor" strokeWidth="1.6"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.6"/></svg>;
+function ArrowIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="size-4"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>;
 }
 
-function SparkIcon() {
-  return <svg aria-hidden="true" viewBox="0 0 32 32" fill="none" className="size-6"><path d="m16 3 2.9 9.1L28 15l-9.1 2.9L16 27l-2.9-9.1L4 15l9.1-2.9L16 3Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/><path d="m25 21 .9 2.8 2.8.9-2.8.9L25 28l-.9-2.4-2.8-.9 2.8-.9L25 21Z" fill="currentColor"/></svg>;
+function NorthArtwork() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 640 540" fill="none" className="north-artwork">
+      <defs>
+        <linearGradient id="north-sky" x1="320" y1="0" x2="320" y2="540" gradientUnits="userSpaceOnUse"><stop stopColor="#315542"/><stop offset="1" stopColor="#132B24"/></linearGradient>
+        <linearGradient id="north-sun" x1="427" y1="125" x2="427" y2="357" gradientUnits="userSpaceOnUse"><stop stopColor="#DCE99A"/><stop offset="1" stopColor="#C6D87A" stopOpacity=".1"/></linearGradient>
+      </defs>
+      <rect width="640" height="540" rx="26" fill="url(#north-sky)"/>
+      <path d="M0 407c74-8 111-43 178-37 82 7 101 55 187 43 65-9 95-48 155-34 44 11 74 38 120 40v121H0V407Z" fill="#1A392C"/>
+      <path d="M0 447c93-24 139-5 205 14 78 23 116 13 184-7 62-18 107-21 154-4 34 12 63 30 97 39v51H0v-93Z" fill="#10251F"/>
+      <circle cx="428" cy="227" r="128" fill="url(#north-sun)" fillOpacity=".72"/>
+      <circle cx="428" cy="227" r="96" stroke="#E5E9B8" strokeOpacity=".42"/>
+      <circle cx="428" cy="227" r="65" stroke="#E5E9B8" strokeOpacity=".25"/>
+      <path d="M74 374 197 264l85 47 93-154 148 186" stroke="#D7E3A2" strokeWidth="2" strokeOpacity=".72" strokeLinejoin="round"/>
+      <path d="m74 374 48-43 34 13 41-80 47 26 42-31 38 21 51-83 42 53 36-13 44 57 26-16 52 68" stroke="#F0EBCB" strokeWidth="1.25" strokeOpacity=".46" strokeLinejoin="round"/>
+      <path d="M57 431h526M89 454h467M127 477h380" stroke="#C8D68F" strokeOpacity=".14"/>
+      <circle cx="197" cy="264" r="4" fill="#DDE89C"/><circle cx="375" cy="157" r="4" fill="#DDE89C"/><circle cx="523" cy="343" r="4" fill="#DDE89C"/>
+      <path d="M81 85v30m-15-15h30M558 111v20m-10-10h20" stroke="#F2EFD8" strokeOpacity=".7" strokeLinecap="round"/>
+      <text x="42" y="48" fill="#D5E0BD" fontFamily="Arial, sans-serif" fontSize="10" letterSpacing="3">NORTE · BRASIL</text>
+      <text x="42" y="507" fill="#D5E0BD" fontFamily="Arial, sans-serif" fontSize="10" letterSpacing="2.5">NOVOS CAMINHOS COMEÇAM PERTO</text>
+    </svg>
+  );
+}
+
+function SmallArrow() {
+  return <span aria-hidden="true" className="inline-flex size-9 items-center justify-center rounded-full border border-current/20"><ArrowIcon /></span>;
 }
 
 export default async function Home() {
   const vacancyData = await getPublicJobs();
+  const featuredJob = vacancyData.jobs[0];
+
   return (
     <main>
-      <div className="bg-[#123a2b] px-4 py-2 text-center text-xs font-medium tracking-wide text-[#e5efe8]">
-        <span className="text-[#f0c46e]">●</span> Protótipo em construção <span className="mx-2 text-[#739583]">/</span> {vacancyData.isDemo ? "exemplos fictícios para demonstração" : "oportunidades publicadas"}
+      <div className="announcement-bar">
+        <span className="announcement-dot" />
+        <p>Plataforma em piloto <span aria-hidden="true">·</span> Feita para aproximar Roraima das próximas oportunidades</p>
+        <span className="announcement-code">RR / 01</span>
       </div>
 
-      <header className="sticky top-0 z-20 border-b border-[#e8ede7] bg-white/95 backdrop-blur">
-        <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
-          <Link href="/" aria-label="ConectaRR, página inicial" className="flex items-center gap-3">
+      <header className="site-header">
+        <div className="header-inner">
+          <Link href="/" aria-label="ConectaRR — início" className="brand-lockup">
             <BrandMark />
-            <span className="text-[19px] font-extrabold tracking-[-.05em] text-[#19392c]">Conecta<span className="text-[#176344]">RR</span></span>
+            <span className="brand-name">Conecta<span>RR</span></span>
           </Link>
-          <nav aria-label="Navegação principal" className="hidden items-center gap-8 md:flex">
-            <Link href="#vagas" className="text-sm font-medium text-[#56675e] transition hover:text-[#176344]">Encontrar oportunidades</Link>
-            <Link href="#como-funciona" className="text-sm font-medium text-[#56675e] transition hover:text-[#176344]">Como funciona</Link>
+          <nav aria-label="Navegação principal" className="desktop-nav">
+            <Link href="#vagas">Oportunidades</Link>
+            <Link href="#sobre">Nossa ideia</Link>
+            <Link href="#organizacoes">Para organizações</Link>
           </nav>
-          <Link href="#para-empresas" className="inline-flex items-center rounded-full border border-[#c9d8cc] px-4 py-2.5 text-xs font-bold text-[#28553e] transition hover:border-[#176344] hover:bg-[#f4f8f4] sm:px-5 sm:text-sm">Sou empresa</Link>
+          <Link href="#vagas" className="header-action">Encontrar uma vaga <ArrowIcon /></Link>
+          <details className="mobile-nav">
+            <summary aria-label="Abrir menu de navegação"><span /><span /></summary>
+            <nav aria-label="Navegação mobile">
+              <Link href="#vagas">Oportunidades</Link>
+              <Link href="#sobre">Nossa ideia</Link>
+              <Link href="#organizacoes">Para organizações</Link>
+            </nav>
+          </details>
         </div>
       </header>
 
-      <section className="relative isolate overflow-hidden bg-[#f6f8f5] px-5 pb-16 pt-14 sm:px-8 sm:pb-20 sm:pt-20 lg:px-12 lg:pb-24 lg:pt-24">
-        <div aria-hidden="true" className="pointer-events-none absolute -right-32 -top-48 -z-10 size-[520px] rounded-full border border-[#dce7dd] sm:size-[720px]" />
-        <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-28 -z-10 size-[370px] rounded-full border border-[#e5ece4] sm:size-[540px]" />
-        <div aria-hidden="true" className="pointer-events-none absolute bottom-[-220px] left-[42%] -z-10 size-[460px] rounded-full bg-[#e8f0e7] blur-3xl" />
-        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.12fr_.88fr] lg:gap-16">
-          <div>
-            <p className="eyebrow inline-flex items-center gap-2 rounded-full border border-[#dce7dd] bg-white/70 px-3.5 py-2">
-              <LocationIcon /> Feito para conectar Roraima
-            </p>
-            <h1 className="mt-7 max-w-3xl text-[clamp(3.2rem,7.2vw,6.4rem)] font-extrabold leading-[.91] tracking-[-.075em] text-[#143d2c]">
-              O próximo passo<br /> começa <span className="relative inline-block text-[#2c8057]">por aqui.<span aria-hidden="true" className="absolute -bottom-1 left-1 h-2 w-[94%] -rotate-2 rounded-full bg-[#efc568]/70" /></span>
-            </h1>
-            <p className="mt-7 max-w-xl text-base leading-7 text-[#596b60] sm:text-lg sm:leading-8">Oportunidades profissionais reunidas em um só lugar. Encontre vagas perto de você e descubra novos caminhos em Roraima.</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="#vagas" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#176344] px-6 text-sm font-bold text-white shadow-[0_10px_25px_-14px_rgba(23,99,68,.7)] transition hover:-translate-y-0.5 hover:bg-[#104d33]">Explorar oportunidades <span aria-hidden="true">→</span></Link>
-              <Link href="#para-empresas" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#d3ded3] bg-white/60 px-6 text-sm font-bold text-[#365744] transition hover:bg-white">Quero divulgar uma vaga</Link>
+      <section className="hero-section">
+        <div className="hero-inner">
+          <div className="hero-copy">
+            <p className="eyebrow"><span className="eyebrow-mark">✳</span> Oportunidades profissionais · Roraima</p>
+            <h1>Talento do Norte.<br /><em>Futuro em movimento.</em></h1>
+            <div className="hero-lower">
+              <p>Um lugar para descobrir caminhos profissionais, encontrar oportunidades locais e dar o próximo passo com mais clareza.</p>
+              <div className="hero-actions">
+                <Link href="#vagas" className="button button-dark">Explorar oportunidades <ArrowIcon /></Link>
+                <Link href="#sobre" className="text-link">Conheça a ideia <span aria-hidden="true">↘</span></Link>
+              </div>
             </div>
-            <p className="mt-5 text-xs leading-5 text-[#78877d]">Projeto em fase de protótipo. {vacancyData.isDemo ? "As oportunidades exibidas abaixo são fictícias." : "As vagas publicadas direcionam para a candidatura externa."}</p>
+            <p className="hero-caption"><span>02°49′ N</span> <span>Um começo no extremo norte do Brasil</span></p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[510px] lg:mr-0">
-            <div aria-hidden="true" className="absolute -inset-5 rotate-[-3deg] rounded-[36px] bg-[#e8efe6]" />
-            <div className="relative rounded-[30px] border border-[#e0e8df] bg-white p-5 shadow-[0_30px_90px_-48px_rgba(24,62,42,.38)] sm:p-7">
-              <div className="flex items-center justify-between border-b border-[#edf1ec] pb-5">
-                <div><p className="text-xs font-semibold uppercase tracking-[.13em] text-[#718278]">Seu próximo movimento</p><p className="mt-1 text-lg font-bold tracking-[-.03em] text-[#19392c]">Começa com uma busca</p></div>
-                <span className="flex size-12 items-center justify-center rounded-2xl bg-[#f5f0e2] text-[#9d782d]"><SparkIcon /></span>
+          <div className="hero-visual">
+            <NorthArtwork />
+            <div className="visual-index"><span>01</span><span>BOA VISTA, RR</span></div>
+            <div className="featured-card">
+              <div className="featured-card-top"><span>{vacancyData.isDemo ? "ESTUDO DE INTERFACE" : "OPORTUNIDADE RECENTE"}</span><span className="featured-card-dot" /></div>
+              <div className="featured-card-body">
+                <span className="featured-company">{featuredJob?.company.slice(0, 1) ?? "C"}</span>
+                <div><p>{featuredJob?.area ?? "Carreiras"} <span>·</span> {featuredJob?.modality ?? "Roraima"}</p><h2>{featuredJob?.title ?? "O próximo passo começa aqui"}</h2></div>
               </div>
-              <div className="mt-5 space-y-3">
-                <div className="flex items-center gap-4 rounded-2xl bg-[#f6f8f5] p-4">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-white text-[#176344] shadow-sm"><LocationIcon /></span>
-                  <div><p className="text-sm font-bold text-[#254633]">Oportunidades locais</p><p className="mt-1 text-xs text-[#78877d]">Explore vagas por município</p></div>
-                  <span className="ml-auto text-[#86a08d]">→</span>
-                </div>
-                <div className="flex items-center gap-4 rounded-2xl bg-[#f6f8f5] p-4">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-white text-[#176344] shadow-sm"><SparkIcon /></span>
-                  <div><p className="text-sm font-bold text-[#254633]">Filtros que fazem sentido</p><p className="mt-1 text-xs text-[#78877d]">Área, formato e tipo de vaga</p></div>
-                  <span className="ml-auto text-[#86a08d]">→</span>
-                </div>
-              </div>
-              <div className="mt-5 rounded-2xl bg-[#143d2c] p-5 text-white">
-                <p className="text-xs font-semibold uppercase tracking-[.14em] text-[#b9d0bf]">Roraima em movimento</p>
-                <p className="mt-2 max-w-xs text-xl font-bold leading-6 tracking-[-.03em]">Um lugar mais simples para encontrar seu caminho profissional.</p>
-                <div className="mt-4 h-px bg-white/15" />
-                <p className="mt-3 text-xs text-[#d1dfd4]">Conectando pessoas e organizações, oportunidade por oportunidade.</p>
-              </div>
+              <p className="featured-card-note">{vacancyData.isDemo ? "Exemplo fictício · para demonstrar a experiência" : featuredJob?.city}</p>
             </div>
-            <span className="absolute -left-5 top-16 hidden rounded-full border border-[#dbe7dc] bg-white px-4 py-2 text-xs font-bold text-[#466b53] shadow-sm sm:block">Roraima • Brasil</span>
+            <div className="hero-orbit-label"><span>+</span><span>RORAIMA<br />EM CONEXÃO</span></div>
           </div>
         </div>
+        <div className="hero-bottomline"><span>CONEXÕES COM PROPÓSITO</span><span>RORAIMA — BRASIL</span></div>
       </section>
+
+      <div className="marquee-band" role="region" aria-label="Trabalho, talento e novas possibilidades em Roraima">
+        <div className="marquee-track" aria-hidden="true">
+          {Array.from({ length: 2 }, (_, row) => <span key={row}>TRABALHO <i>✳</i> TALENTO <i>✳</i> TERRITÓRIO <i>✳</i> POSSIBILIDADE <i>✳</i> RORAIMA <i>✳</i> </span>)}
+        </div>
+      </div>
 
       <VacancyExplorer {...vacancyData} />
 
-      <section id="como-funciona" className="px-5 py-20 sm:px-8 lg:px-12 lg:py-24">
-        <div className="mx-auto max-w-7xl">
-          <div className="max-w-2xl">
-            <p className="eyebrow">Uma experiência direta</p>
-            <h2 className="section-title mt-3">Menos procura espalhada.<br /> Mais clareza no caminho.</h2>
+      <section id="sobre" className="manifesto-section">
+        <div className="manifesto-side"><span>02 / NOSSA IDEIA</span><span className="manifesto-star">✳</span></div>
+        <div className="manifesto-content">
+          <p className="eyebrow eyebrow-light">Um olhar mais próximo para o trabalho</p>
+          <h2>Oportunidade boa<br />também <em>nasce por aqui.</em></h2>
+          <div className="manifesto-foot">
+            <p>Encontrar trabalho não deveria depender de procurar em dezenas de lugares. O ConectaRR organiza oportunidades em uma experiência pensada para quem vive, trabalha e empreende em Roraima.</p>
+            <div className="manifesto-signature"><span className="signature-line" /><span>GENTE · TRABALHO · NORTE</span></div>
           </div>
-          <div className="mt-12 grid gap-4 md:grid-cols-3">
-            {[
-              ["01", "Encontre", "Busque vagas por cargo, área, cidade e modalidade de trabalho."],
-              ["02", "Entenda", "Veja requisitos e detalhes em uma página feita para facilitar a decisão."],
-              ["03", "Conecte-se", "Saiba como demonstrar interesse e acompanhar cada oportunidade."],
-            ].map(([number, title, description]) => (
-              <article key={number} className="rounded-3xl border border-[#e3eae2] p-6 sm:p-8">
-                <span className="text-sm font-bold tracking-widest text-[#7b9a83]">{number}</span>
-                <h3 className="mt-7 text-2xl font-bold tracking-[-.04em] text-[#19392c]">{title}</h3>
-                <p className="mt-3 max-w-sm text-sm leading-6 text-[#68776e]">{description}</p>
-              </article>
-            ))}
-          </div>
+        </div>
+        <div className="manifesto-stamp" aria-hidden="true"><span>FEITO NO</span><strong>NORTE</strong><span>PARA CONECTAR</span><i>✳</i></div>
+      </section>
+
+      <section className="principles-section">
+        <div className="principles-head">
+          <div><p className="eyebrow">03 / COMO A EXPERIÊNCIA FUNCIONA</p><h2 className="section-heading">Direto ao que<br /><em>importa para você.</em></h2></div>
+          <p className="principles-intro">Informação clara para encontrar oportunidades e decidir qual caminho faz sentido para sua vida profissional.</p>
+        </div>
+        <div className="principles-grid">
+          <article className="principle-card principle-card-primary"><span className="principle-number">01</span><span className="principle-icon">⌕</span><h3>Encontre com contexto</h3><p>Busque por cargo, área, município e modalidade de trabalho em um só lugar.</p><span className="principle-bottom">BUSCA + FILTROS <SmallArrow /></span></article>
+          <article className="principle-card"><span className="principle-number">02</span><span className="principle-icon principle-icon-paper">↗</span><h3>Entenda a oportunidade</h3><p>Veja quem está contratando, os detalhes da vaga e as informações disponíveis.</p><span className="principle-bottom">INFORMAÇÃO OBJETIVA <SmallArrow /></span></article>
+          <article className="principle-card principle-card-lime"><span className="principle-number">03</span><span className="principle-icon">→</span><h3>Conecte-se direto</h3><p>Quando uma vaga está publicada, siga para o canal de candidatura informado.</p><span className="principle-bottom">CANDIDATURA EXTERNA <SmallArrow /></span></article>
         </div>
       </section>
 
-      <section id="para-empresas" className="bg-[#143d2c] px-5 py-16 text-white sm:px-8 lg:px-12 lg:py-20">
-        <div className="mx-auto flex max-w-7xl flex-col gap-7 md:flex-row md:items-center md:justify-between">
-          <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[.15em] text-[#bdd6c4]">Para empresas e organizações</p>
-            <h2 className="mt-3 text-3xl font-bold leading-tight tracking-[-.05em] sm:text-4xl">Uma boa oportunidade merece ser encontrada.</h2>
-            <p className="mt-3 text-sm leading-6 text-[#d0dfd4]">Estamos preparando um jeito simples e responsável de divulgar vagas em Roraima.</p>
-          </div>
-          <span className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-full border border-white/25 px-6 text-sm font-semibold text-white/90">Cadastro de empresas em breve</span>
+      <section id="organizacoes" className="organizations-section">
+        <div className="organizations-art" aria-hidden="true"><span className="org-circle org-circle-one"/><span className="org-circle org-circle-two"/><span className="org-cross">✳</span><span className="org-coordinates">03° N<br />60° W</span></div>
+        <div className="organizations-copy">
+          <p className="eyebrow eyebrow-light">PARA EMPRESAS E ORGANIZAÇÕES</p>
+          <h2>Tem uma oportunidade?<br /><em>Ajude-a a chegar mais longe.</em></h2>
+          <p>Estamos preparando um processo responsável para que organizações possam publicar vagas com informações claras e confiáveis.</p>
+          <span className="coming-soon"><span /> Cadastro de organizações em preparação</span>
         </div>
+        <span className="org-index">04 / PRÓXIMOS PASSOS</span>
       </section>
 
-      <footer className="bg-white px-5 py-7 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 text-xs text-[#738078] sm:flex-row sm:items-center sm:justify-between">
-          <Link href="/" className="font-bold text-[#254633]">ConectaRR <span className="font-normal text-[#89968d]">— aproximando oportunidades em Roraima</span></Link>
-          <p>Protótipo acadêmico em desenvolvimento · Boa Vista, RR</p>
+      <footer className="site-footer">
+        <div className="footer-main">
+          <div><Link href="/" className="brand-lockup footer-brand"><BrandMark /><span className="brand-name">Conecta<span>RR</span></span></Link><p>Um projeto em construção para aproximar Roraima de novas oportunidades profissionais.</p></div>
+          <div className="footer-links"><span>EXPLORE</span><Link href="#vagas">Oportunidades <ArrowIcon /></Link><Link href="#sobre">Nossa ideia <ArrowIcon /></Link><Link href="#organizacoes">Para organizações <ArrowIcon /></Link></div>
+          <a className="github-link" href="https://github.com/robertcloud01/ConectaRR" target="_blank" rel="noreferrer"><span>PROJETO ABERTO</span><strong>Construído em público <span aria-hidden="true">↗</span></strong></a>
         </div>
+        <div className="footer-bottom"><span>© {new Date().getFullYear()} CONECTARR · PROJETO EM DESENVOLVIMENTO</span><span>BOA VISTA, RORAIMA <i>✳</i></span></div>
       </footer>
     </main>
   );
