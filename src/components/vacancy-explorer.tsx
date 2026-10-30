@@ -53,7 +53,7 @@ export function VacancyExplorer({ jobs, cities, isDemo }: VacancyExplorerProps) 
         <div className="search-panel">
           <label className="search-field"><SearchIcon /><span className="sr-only">Buscar cargo, empresa ou área</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Qual caminho você procura?" /></label>
           <label className="filter-field"><PinIcon /><span className="sr-only">Filtrar por município</span><select value={city} onChange={(event) => setCity(event.target.value)}>{cityOptions.map((option) => <option key={option}>{option}</option>)}</select><span aria-hidden="true" className="select-caret">⌄</span></label>
-          <label className="filter-field filter-field-mode"><span className="sr-only">Filtrar por modalidade</span><select value={modality} onChange={(event) => setModality(event.target.value)}>{["Todas", "Presencial", "Híbrido", "Remoto"].map((option) => <option key={option}>{option === "Todas" ? "Qualquer modalidade" : option}</option>)}</select><span aria-hidden="true" className="select-caret">⌄</span></label>
+          <label className="filter-field filter-field-mode"><span className="sr-only">Filtrar por modalidade</span><select value={modality} onChange={(event) => setModality(event.target.value)}>{["Todas", "Presencial", "Híbrido", "Remoto"].map((option) => <option key={option} value={option}>{option === "Todas" ? "Qualquer modalidade" : option}</option>)}</select><span aria-hidden="true" className="select-caret">⌄</span></label>
           <a href="#oportunidades-lista" className="search-submit">Buscar <ArrowIcon /></a>
         </div>
 
