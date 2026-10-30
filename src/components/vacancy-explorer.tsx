@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { cities, jobs } from "@/data/jobs";
+import type { Job } from "@/data/jobs";
 
 function SearchIcon() {
   return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-5"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" strokeWidth="1.8" /><path d="m16 16 4.2 4.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>;
@@ -16,7 +16,7 @@ function ArrowIcon() {
   return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-4"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
 
-export function VacancyExplorer() {
+export function VacancyExplorer({ jobs, cities, isDemo }: { jobs: Job[]; cities: string[]; isDemo: boolean }) {
   const [query, setQuery] = useState("");
   const [city, setCity] = useState(cities[0]);
   const [modality, setModality] = useState("Todas");
@@ -38,9 +38,9 @@ export function VacancyExplorer() {
           <div>
             <p className="eyebrow">Explore oportunidades</p>
             <h2 className="section-title mt-3">Seu próximo passo<br className="hidden sm:block" /> pode começar aqui.</h2>
-            <p className="mt-4 max-w-xl text-base leading-7 text-[#56675e]">Encontre oportunidades por área, cidade e modalidade. Este protótipo usa anúncios fictícios para testar a experiência.</p>
+            <p className="mt-4 max-w-xl text-base leading-7 text-[#56675e]">Encontre oportunidades por área, cidade e modalidade. As candidaturas são feitas diretamente no canal informado pela organização.</p>
           </div>
-          <span className="demo-pill self-start md:self-auto">Dados demonstrativos</span>
+          <span className="demo-pill self-start md:self-auto">{isDemo ? "Exemplos fictícios" : "Vagas publicadas"}</span>
         </div>
 
         <div className="mt-9 grid gap-3 rounded-3xl border border-[#dce5dc] bg-white p-3 shadow-[0_14px_45px_-32px_rgba(18,54,38,.35)] md:grid-cols-[1fr_220px_170px_auto] md:items-center md:p-3">
@@ -66,7 +66,7 @@ export function VacancyExplorer() {
         </div>
 
         <div id="resultados" className="mt-10 flex flex-wrap items-center justify-between gap-3">
-          <p aria-live="polite" className="text-sm font-medium text-[#58685f]">{filteredJobs.length} exemplos de oportunidade</p>
+          <p aria-live="polite" className="text-sm font-medium text-[#58685f]">{filteredJobs.length} {isDemo ? "exemplos de oportunidade" : "oportunidades"}</p>
           <div className="flex flex-wrap gap-2">
             {["Todas", "Presencial", "Híbrido", "Remoto"].map((item) => (
               <button key={item} type="button" onClick={() => setModality(item)} aria-pressed={modality === item} className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${modality === item ? "border-[#176344] bg-[#176344] text-white" : "border-[#d7e0d7] bg-white text-[#526258] hover:border-[#93ad9b]"}`}>
@@ -82,7 +82,7 @@ export function VacancyExplorer() {
               <article key={job.slug} className="group flex min-h-[285px] flex-col rounded-3xl border border-[#e1e8e0] bg-white p-6 transition duration-200 hover:-translate-y-1 hover:border-[#b6cdb9] hover:shadow-[0_20px_45px_-35px_rgba(18,54,38,.5)]">
                 <div className="flex items-start justify-between gap-3">
                   <span className="flex size-11 items-center justify-center rounded-2xl bg-[#edf5ee] text-sm font-bold text-[#176344]">{job.company.slice(0, 1)}</span>
-                  <span className="rounded-full bg-[#fbf4e4] px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#85642b]">Exemplo</span>
+                  <span className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wide ${job.isDemo ? "bg-[#fbf4e4] text-[#85642b]" : "bg-[#eaf4ed] text-[#286145]"}`}>{job.isDemo ? "Exemplo" : "Publicada"}</span>
                 </div>
                 <p className="mt-5 text-xs font-medium text-[#668075]">{job.area} <span className="mx-1.5 text-[#b7c4ba]">·</span> {job.contract}</p>
                 <h3 className="mt-2 text-lg font-bold leading-6 tracking-[-.02em] text-[#19392c]">{job.title}</h3>
@@ -92,7 +92,11 @@ export function VacancyExplorer() {
                 </div>
                 <div className="mt-auto flex items-center justify-between border-t border-[#edf0ec] pt-4">
                   <span className="text-xs text-[#87928b]">{job.published}</span>
-                  <Link href={`/vagas/${job.slug}`} aria-label={`Ver detalhes: ${job.title}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#176344] transition group-hover:gap-2.5">Detalhes <ArrowIcon /></Link>
+                  {job.applicationUrl ? (
+                    <a href={job.applicationUrl} target="_blank" rel="noreferrer" aria-label={`Acessar candidatura: ${job.title}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#176344] transition group-hover:gap-2.5">Candidatar-se <ArrowIcon /></a>
+                  ) : (
+                    <Link href={`/vagas/${job.slug}`} aria-label={`Ver detalhes: ${job.title}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#176344] transition group-hover:gap-2.5">Detalhes <ArrowIcon /></Link>
+                  )}
                 </div>
                 {index === 0 && <span className="sr-only">Primeiro exemplo de vaga</span>}
               </article>
@@ -100,7 +104,7 @@ export function VacancyExplorer() {
           </div>
         ) : (
           <div className="mt-5 rounded-3xl border border-dashed border-[#cbd8cc] bg-white px-6 py-14 text-center">
-            <p className="text-base font-semibold text-[#19392c]">Nenhum exemplo encontrado</p>
+            <p className="text-base font-semibold text-[#19392c]">Nenhuma oportunidade encontrada</p>
             <p className="mt-2 text-sm text-[#68776e]">Tente outra palavra ou remova um dos filtros.</p>
             <button type="button" onClick={() => { setQuery(""); setCity(cities[0]); setModality("Todas"); }} className="mt-5 text-sm font-semibold text-[#176344] underline underline-offset-4">Limpar filtros</button>
           </div>
