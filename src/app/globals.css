@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --forest: #143d2c;
+  --leaf: #176344;
+  --cream: #f6f8f5;
+  --ink: #19392c;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: white; color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
+::selection { background: #d1e9d8; color: #143d2c; }
+
+.eyebrow { color: #46745c; font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.section-title { color: #173b2b; font-size: clamp(2rem, 4.2vw, 3.3rem); font-weight: 750; line-height: 1.04; letter-spacing: -.055em; }
+.demo-pill { display: inline-flex; align-items: center; gap: .45rem; border: 1px solid #ebd9ab; border-radius: 999px; background: #fffaf0; padding: .6rem .85rem; color: #775a24; font-size: .72rem; font-weight: 700; }
+.demo-pill::before { content: ""; width: .42rem; height: .42rem; border-radius: 50%; background: #d8a842; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
