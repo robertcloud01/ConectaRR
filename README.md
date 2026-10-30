@@ -7,16 +7,17 @@ Plataforma de oportunidades profissionais com foco inicial em Roraima. O projeto
 - Primeira interface responsiva para a página inicial e exploração de oportunidades.
 - Dados de demonstração, identificados como fictícios na interface.
 - Filtros locais por texto, município e modalidade.
+- Leitura de oportunidades publicadas no Supabase com chave publicável e políticas RLS.
 - Página demonstrativa de detalhes por oportunidade.
-- Ainda sem Supabase, contas, candidaturas reais ou publicação de vagas.
-- Primeira migração PostgreSQL preparada localmente, ainda não aplicada a nenhum projeto Supabase.
+- Esquema PostgreSQL inicial aplicado ao projeto Supabase dedicado.
+- Ainda sem autenticação no frontend ou candidatura real.
 
 ## Tecnologias
 
 - Next.js App Router e React
 - TypeScript
 - Tailwind CSS v4
-- Supabase e PostgreSQL serão conectados após a validação inicial dos fluxos
+- Supabase Auth e PostgreSQL para persistência e controle de acesso
 
 ## Executar localmente
 
@@ -25,7 +26,7 @@ npm install
 npm run dev
 ```
 
-Abra `http://localhost:3000`. Para configurar o Supabase em uma etapa futura, copie `.env.example` para `.env.local` e preencha a URL e a chave publicável do projeto. Chaves secretas privilegiadas nunca devem começar com `NEXT_PUBLIC_`.
+Abra `http://localhost:3000`. Para conectar o catálogo ao Supabase, copie `.env.example` para `.env.local` e preencha a URL e a chave publicável do projeto. Chaves secretas privilegiadas nunca devem começar com `NEXT_PUBLIC_`.
 
 ## Estrutura
 
@@ -43,13 +44,13 @@ supabase/migrations/    propostas de esquema PostgreSQL com RLS
 1. Revisar a proposta visual e os filtros com pessoas candidatas de Roraima.
 2. Entrevistar organizações sobre publicação e recebimento de candidaturas.
 3. Fechar o modelo de candidatura e a política de moderação.
-4. Revisar a migração e validar as políticas RLS em um ambiente de desenvolvimento.
-5. Escolher um projeto Supabase próprio para o ConectaRR, integrar Auth e substituir os dados demonstrativos por oportunidades autorizadas.
+4. Integrar Supabase Auth para as contas de empresas e moderação.
+5. Criar o fluxo de publicação e revisão de oportunidades.
 
 O Documento Mestre v1.0 é a referência inicial de escopo e decisões do produto. As principais hipóteses permanecem abertas até validação com usuários e organizações.
 
 ## Banco de dados
 
-`supabase/migrations/20261030120000_initial_schema.sql` é uma proposta local para perfis, empresas, oportunidades e vagas salvas. Ela inclui políticas de Row Level Security e estados de moderação, mas ainda não foi executada em nenhum projeto Supabase. Revise-a e valide-a em um ambiente de desenvolvimento antes de aplicar remotamente.
+`supabase/migrations/20261030154806_initial_schema.sql` define perfis, empresas, oportunidades e vagas salvas, com políticas de Row Level Security e estados de moderação. Ela já foi aplicada ao projeto Supabase dedicado do ConectaRR.
 
-O piloto proposto usa candidatura por link externo. A plataforma não armazena currículos nem registros de candidatura até definirmos a necessidade, as permissões e a retenção desses dados.
+O catálogo público consulta apenas oportunidades publicadas e aprovadas. Enquanto não houver anúncios reais, a interface mantém exemplos fictícios identificados como demonstração. O piloto usa candidatura por link externo; a plataforma não armazena currículos nem registros de candidatura.
