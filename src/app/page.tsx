@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { VacancyExplorer } from "@/components/vacancy-explorer";
+import { getPublicJobs } from "@/lib/public-jobs";
 
 function BrandMark() {
   return <span className="flex size-10 items-center justify-center rounded-[14px] bg-[#176344] text-lg font-black tracking-[-.08em] text-white shadow-[0_5px_14px_-7px_rgba(23,99,68,.7)]">C<span className="text-[#f0c46e]">+</span></span>;
@@ -13,11 +14,12 @@ function SparkIcon() {
   return <svg aria-hidden="true" viewBox="0 0 32 32" fill="none" className="size-6"><path d="m16 3 2.9 9.1L28 15l-9.1 2.9L16 27l-2.9-9.1L4 15l9.1-2.9L16 3Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/><path d="m25 21 .9 2.8 2.8.9-2.8.9L25 28l-.9-2.4-2.8-.9 2.8-.9L25 21Z" fill="currentColor"/></svg>;
 }
 
-export default function Home() {
+export default async function Home() {
+  const vacancyData = await getPublicJobs();
   return (
     <main>
       <div className="bg-[#123a2b] px-4 py-2 text-center text-xs font-medium tracking-wide text-[#e5efe8]">
-        <span className="text-[#f0c46e]">●</span> Protótipo em construção <span className="mx-2 text-[#739583]">/</span> vagas desta página são apenas exemplos
+        <span className="text-[#f0c46e]">●</span> Protótipo em construção <span className="mx-2 text-[#739583]">/</span> {vacancyData.isDemo ? "exemplos fictícios para demonstração" : "oportunidades publicadas"}
       </div>
 
       <header className="sticky top-0 z-20 border-b border-[#e8ede7] bg-white/95 backdrop-blur">
@@ -51,7 +53,7 @@ export default function Home() {
               <Link href="#vagas" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#176344] px-6 text-sm font-bold text-white shadow-[0_10px_25px_-14px_rgba(23,99,68,.7)] transition hover:-translate-y-0.5 hover:bg-[#104d33]">Explorar oportunidades <span aria-hidden="true">→</span></Link>
               <Link href="#para-empresas" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#d3ded3] bg-white/60 px-6 text-sm font-bold text-[#365744] transition hover:bg-white">Quero divulgar uma vaga</Link>
             </div>
-            <p className="mt-5 text-xs leading-5 text-[#78877d]">Projeto em fase de protótipo. As oportunidades exibidas abaixo são fictícias.</p>
+            <p className="mt-5 text-xs leading-5 text-[#78877d]">Projeto em fase de protótipo. {vacancyData.isDemo ? "As oportunidades exibidas abaixo são fictícias." : "As vagas publicadas direcionam para a candidatura externa."}</p>
           </div>
 
           <div className="relative mx-auto w-full max-w-[510px] lg:mr-0">
@@ -85,7 +87,7 @@ export default function Home() {
         </div>
       </section>
 
-      <VacancyExplorer />
+      <VacancyExplorer {...vacancyData} />
 
       <section id="como-funciona" className="px-5 py-20 sm:px-8 lg:px-12 lg:py-24">
         <div className="mx-auto max-w-7xl">
