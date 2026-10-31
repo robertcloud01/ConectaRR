@@ -1,21 +1,31 @@
-# Decisões iniciais do MVP
+# Decisões do MVP
 
-## Por que começar pelo catálogo público
+## Catálogo público sem cadastro
 
-Uma pessoa deve conseguir entender o serviço e encontrar oportunidades sem criar uma conta antes. Isso reduz barreiras e permite avaliar a descoberta antes de pedir dados pessoais.
+Qualquer pessoa pode descobrir oportunidades sem criar conta. Isso reduz barreiras e mantém os dados de candidato fora do piloto.
 
-## Por que os dados são demonstrativos
+## Anúncios demonstrativos identificados
 
-Não temos ainda autorização de empresas para divulgar vagas reais. A interface mostra exemplos fictícios e mantém um aviso visível. Não deve ser publicada como fonte real de vagas até que conteúdo, autorização e operação de moderação estejam definidos.
+Enquanto não houver autorização de organizações para divulgar vagas reais, a interface mantém exemplos fictícios com aviso explícito. Não publicar dados fabricados como oportunidades reais.
 
-## Por que a primeira busca é local
+## Cadastro e publicação moderados
 
-Busca por título, empresa demonstrativa, município e modalidade ajuda a prototipar a experiência. Supabase e PostgreSQL serão introduzidos quando filtros, estados de vaga e permissões tiverem sido revisados. Assim evitamos desenhar políticas de acesso em cima de um modelo de dados ainda incerto.
+Organizações criam conta autenticada, submetem cadastro para aprovação e, depois de aprovadas, enviam vagas em estado pendente. A moderação revisa antes da publicação. O estado é imposto por RLS; cliente autenticado não pode publicar por conta própria.
 
-## Decisão pendente: candidatura
+## Candidatura por link externo
 
-O Documento Mestre propõe candidatura interna simplificada e link externo como caminhos possíveis. Antes de persistir currículos ou candidaturas, vamos conversar com organizações e escolher o menor fluxo que atende ao piloto. Dados de currículo não serão coletados nesta versão.
+No piloto, cada organização informa um endereço HTTPS para seu processo seletivo. O ConectaRR não recebe currículo nem registra uma candidatura como concluída.
 
-## Decisão pendente: estados e moderação
+## Papéis
 
-Os estados previstos são rascunho, pendente, publicada, pausada, encerrada, expirada e rejeitada. A transição permitida e a responsabilidade por cada ação precisam ser especificadas antes da integração com banco.
+- Pessoa visitante: lê oportunidades publicadas.
+- Organização autenticada: administra a própria organização e vagas dentro das transições permitidas.
+- Moderador: membro cadastrado na tabela privada `private.moderators`; pode rever organizações e vagas.
+
+## Limites conhecidos
+
+- Um usuário registra uma organização no painel inicial.
+- O primeiro moderador deve ser provisionado manualmente no banco pelo proprietário do projeto.
+- Não há recuperação de senha no primeiro incremento; o fluxo pode ser adicionado com a configuração de e-mail do Supabase.
+- Não há suporte a upload de CV, candidatura dentro da plataforma ou notificações.
+- A conformidade operacional depende de revisar política de privacidade, termos, canais de denúncia e rotina de remoção antes de divulgar o serviço amplamente.

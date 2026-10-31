@@ -1,56 +1,60 @@
 # ConectaRR
 
-Plataforma de oportunidades profissionais com foco inicial em Roraima. O projeto começa com uma experiência pública de descoberta de vagas; autenticação, publicação real e persistência entram depois de validarmos os fluxos e as regras de moderação.
+Plataforma de oportunidades profissionais com foco inicial em Roraima. O piloto oferece catálogo público, autenticação de organizações, envio de vagas para moderação e publicação com candidatura por link externo.
 
-## Estado atual
+## O que funciona
 
-- Primeira interface responsiva para a página inicial e exploração de oportunidades.
-- Dados de demonstração, identificados como fictícios na interface.
-- Filtros locais por texto, município e modalidade.
-- Leitura de oportunidades publicadas no Supabase com chave publicável e políticas RLS.
-- Página demonstrativa de detalhes por oportunidade.
-- Esquema PostgreSQL inicial aplicado ao projeto Supabase dedicado.
-- Ainda sem autenticação no frontend ou candidatura real.
+- Catálogo responsivo com busca por texto, município, modalidade e área.
+- Demonstração claramente identificada enquanto não houver vagas reais autorizadas.
+- Consulta de vagas publicadas no Supabase, protegida por RLS.
+- Página de detalhes para vagas demonstrativas e publicadas, com encaminhamento externo.
+- Criação de conta e login de organizações por Supabase Auth.
+- Cadastro de organização aguardando validação.
+- Envio de vagas apenas por organizações aprovadas; vagas começam em estado pendente.
+- Painel restrito de moderação para aprovar organizações e publicar ou rejeitar vagas.
+- PostgreSQL com RLS, funções de autorização e esquema de perfis, organizações, vagas e salvas.
 
-## Tecnologias
+O piloto não armazena currículos nem confirma candidaturas. Não existem anúncios, empresas, métricas ou depoimentos reais sem autorização.
 
-- Next.js App Router e React
-- TypeScript
-- Tailwind CSS v4
-- Supabase Auth e PostgreSQL para persistência e controle de acesso
+## Stack
+
+Next.js App Router, React, TypeScript, Tailwind CSS v4, Supabase Auth e PostgreSQL.
 
 ## Executar localmente
 
 ```bash
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
-Abra `http://localhost:3000`. Para conectar o catálogo ao Supabase, copie `.env.example` para `.env.local` e preencha a URL e a chave publicável do projeto. Chaves secretas privilegiadas nunca devem começar com `NEXT_PUBLIC_`.
+Preencha `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` com os dados do projeto Supabase. Nunca coloque uma chave `service_role` ou secret em variável `NEXT_PUBLIC_*`.
 
-## Estrutura
+## Fluxo da organização
 
-```text
-src/
-  app/                 rotas, layout e estilos globais
-  components/          interface interativa reutilizável
-  data/                conteúdo demonstrativo tipado
-docs/                  decisões, escopo e fluxos do projeto
-supabase/migrations/    propostas de esquema PostgreSQL com RLS
+1. A pessoa responsável cria conta em `/conta` e confirma o e-mail, se a confirmação estiver ativa no Supabase Auth.
+2. Em `/painel`, envia os dados da organização.
+3. A moderação revisa a organização no painel `/moderacao`.
+4. Após aprovação, a organização envia vagas que entram como pendentes.
+5. A moderação confere dados e link de candidatura e publica ou rejeita a vaga.
+6. Vagas publicadas aparecem no catálogo e levam a candidatura ao site informado pela organização.
+
+## Primeiro moderador
+
+Por segurança, uma conta pública nunca ganha permissão de moderação sozinha. Após criar sua conta e confirmar o e-mail, copie o UUID do usuário na seção Authentication do painel Supabase e execute, no SQL Editor do projeto, substituindo `UUID_DA_CONTA`:
+
+```sql
+insert into private.moderators (user_id)
+values ('UUID_DA_CONTA')
+on conflict (user_id) do nothing;
 ```
 
-## Próximas etapas
+A tabela está no schema `private`, sem acesso via API. O painel verifica o papel por uma função que retorna apenas o status da própria conta.
 
-1. Revisar a proposta visual e os filtros com pessoas candidatas de Roraima.
-2. Entrevistar organizações sobre publicação e recebimento de candidaturas.
-3. Fechar o modelo de candidatura e a política de moderação.
-4. Integrar Supabase Auth para as contas de empresas e moderação.
-5. Criar o fluxo de publicação e revisão de oportunidades.
+## Banco e migrations
 
-O Documento Mestre v1.0 é a referência inicial de escopo e decisões do produto. As principais hipóteses permanecem abertas até validação com usuários e organizações.
+As migrations estão em `supabase/migrations/`. O esquema inicial e a migration `20261031170538_moderator_check_and_job_owner_index.sql` foram aplicados ao projeto Supabase ConectaRR. A primeira define perfis, empresas, vagas, vagas salvas e políticas RLS; a segunda adiciona a verificação de moderador e o índice de autor das vagas.
 
-## Banco de dados
+## Escopo do piloto
 
-`supabase/migrations/20261030154806_initial_schema.sql` define perfis, empresas, oportunidades e vagas salvas, com políticas de Row Level Security e estados de moderação. Ela já foi aplicada ao projeto Supabase dedicado do ConectaRR.
-
-O catálogo público consulta apenas oportunidades publicadas e aprovadas. Enquanto não houver anúncios reais, a interface mantém exemplos fictícios identificados como demonstração. O piloto usa candidatura por link externo; a plataforma não armazena currículos nem registros de candidatura.
+Este MVP oferece descoberta e publicação moderada. Não inclui candidatura interna, upload de currículo, busca de candidatos, pagamentos, assinatura, mensagens, notificações transacionais nem automação de verificação empresarial. O projeto requer política de privacidade e termos revisados antes de operar como serviço comercial e avaliação acadêmica da UNAMA depende do curso e da instituição.

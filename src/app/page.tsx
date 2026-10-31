@@ -65,7 +65,7 @@ export default async function Home() {
             <Link href="#sobre">Nossa ideia</Link>
             <Link href="#organizacoes">Para organizações</Link>
           </nav>
-          <Link href="#vagas" className="header-action">Encontrar uma vaga <ArrowIcon /></Link>
+          <Link href="/conta" className="header-action">Para organizações <ArrowIcon /></Link>
           <details className="mobile-nav">
             <summary aria-label="Abrir menu de navegação"><span /><span /></summary>
             <nav aria-label="Navegação mobile">
@@ -147,8 +147,8 @@ export default async function Home() {
         <div className="organizations-copy">
           <p className="eyebrow eyebrow-light">PARA EMPRESAS E ORGANIZAÇÕES</p>
           <h2>Tem uma oportunidade?<br /><em>Ajude-a a chegar mais longe.</em></h2>
-          <p>Estamos preparando um processo responsável para que organizações possam publicar vagas com informações claras e confiáveis.</p>
-          <span className="coming-soon"><span /> Cadastro de organizações em preparação</span>
+          <p>Cadastre sua organização, envie oportunidades e acompanhe a revisão. Cada vaga passa por moderação antes de ser publicada.</p>
+          <Link className="button button-light" href="/conta">Acessar área de organizações <ArrowIcon /></Link>
         </div>
         <span className="org-index">04 / PRÓXIMOS PASSOS</span>
       </section>

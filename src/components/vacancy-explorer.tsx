@@ -19,7 +19,7 @@ function ArrowIcon() {
 type VacancyExplorerProps = { jobs: Job[]; cities: string[]; isDemo: boolean };
 
 export function VacancyExplorer({ jobs, cities, isDemo }: VacancyExplorerProps) {
-  const cityOptions = cities.length ? cities : ["Todas as cidades"];
+  const cityOptions = useMemo(() => cities.length ? cities : ["Todas as cidades"], [cities]);
   const [query, setQuery] = useState("");
   const [city, setCity] = useState(cityOptions[0]);
   const [modality, setModality] = useState("Todas");
