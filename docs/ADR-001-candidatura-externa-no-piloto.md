@@ -1,6 +1,6 @@
 # ADR 001: candidatura externa no piloto
 
-- **Status:** proposta para o primeiro piloto
+- **Status:** aceita para o MVP inicial
 - **Data:** 30 de outubro de 2026
 
 ## Contexto
@@ -25,4 +25,4 @@ No primeiro piloto, o ConectaRR publica oportunidades e encaminha a pessoa candi
 - Não haverá contagem confiável de candidaturas concluídas nesta versão.
 - A candidatura interna poderá ser adicionada após validação do fluxo e definição de privacidade, acesso e retenção.
 
-Esta decisão é uma proposta de produto para revisão. A migração SQL implementa somente a estrutura inicial de perfis, empresas, oportunidades e vagas salvas; ela ainda não cria tabelas de candidatura.
+Esta decisão foi adotada no MVP. O painel de organizações solicita um endereço HTTPS de candidatura, e a interface informa que o fluxo ocorre fora da plataforma. Não há tabela de candidaturas nem armazenamento de currículo.
